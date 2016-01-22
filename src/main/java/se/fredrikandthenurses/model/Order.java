@@ -11,8 +11,8 @@ public class Order extends AbstractEntity {
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
-    @ElementCollection
-    @CollectionTable(name = "OrderRows", joinColumns = @JoinColumn(name = "idorder"))
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "orderId")
     private Collection<OrderRow> orderRowList;
     @Column(nullable = false, unique = true)
     private String orderNumber;

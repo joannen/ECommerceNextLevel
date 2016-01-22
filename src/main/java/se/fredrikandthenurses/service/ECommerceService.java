@@ -114,11 +114,11 @@ public class ECommerceService {
 }
 
     public List<Order> findOrdersByStatus(OrderStatus status) {
-        return new ArrayList<>(orderRepo.findOrdersByStatus(status));
+        return new ArrayList<>(orderRepo.findByOrderStatus(status));
     }
 
     public List<Order> findOrdersByMinimumPrice(double price) {
-        return new ArrayList<>(orderRepo.findByMinimumPriceGreaterThan(price));
+        return new ArrayList<>(orderRepo.findByPriceGreaterThan(price));
     }
 
     public Order findByOrderNumber(String orderNumber) {
