@@ -2,8 +2,8 @@ package se.fredrikandthenurses.model;
 
 import javax.persistence.*;
 
-@Entity
-public class OrderRow extends AbstractEntity {
+@Embeddable
+public class OrderRow {
 
     @ManyToOne
     @JoinColumn(name= "productId", nullable = false)
