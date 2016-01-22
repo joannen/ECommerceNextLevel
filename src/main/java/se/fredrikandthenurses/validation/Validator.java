@@ -1,6 +1,5 @@
 package se.fredrikandthenurses.validation;
 
-import se.fredrikandthenurses.exception.RepositoryException;
 import se.fredrikandthenurses.model.*;
 
 import java.util.Collection;
@@ -20,7 +19,7 @@ public class Validator{
        return !passwordIsEmpty(entity.getPassword());
     }
 
-    public static boolean isValid(PersistableOrder entity) {
+    public static boolean isValid(Order entity) {
         return(orderNumberIsEmpty(entity.getOrderNumber())|| listOfOrderRowsIsEmpty(entity.getOrderRowList()) ||
                 priceMoreThan50K(entity.getPrice()));
     }

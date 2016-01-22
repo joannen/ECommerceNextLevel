@@ -77,10 +77,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons.lang.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-        </dependency>
 
     </dependencies>
 

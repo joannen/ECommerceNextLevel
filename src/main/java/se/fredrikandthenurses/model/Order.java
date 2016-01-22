@@ -1,27 +1,18 @@
 package se.fredrikandthenurses.model;
 
 import javax.persistence.*;
-import javax.persistence.criteria.Order;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-@Entity//skicka in name
-@NamedQueries(value = {
-        @NamedQuery(name = "PersistableOrder.FindByUser", query = "SELECT p FROM PersistableOrder p WHERE p.user.id = ?1"),
-        @NamedQuery(name = "PersistableOrder.FindByOrderNumber", query = "SELECT p FROM PersistableOrder p Join Fetch p.orderRowList WHERE p.orderNumber = ?1"),
-        @NamedQuery(name = "PersistableOrder.FindByStatus", query = "SELECT p FROM PersistableOrder p Join Fetch p.orderRowList WHERE p.orderStatus = ?1"),
-        @NamedQuery(name = "PersistableOrder.FindByMinimumPrice", query = "SELECT p FROM PersistableOrder p where p.price >= ?1 "),
-        @NamedQuery(name = "PersistableOrder.getAll", query = "SELECT p FROM PersistableOrder p")
-})
-public class PersistableOrder extends AbstractEntity {
+@Entity(name = "PersistableOrder")
+public class Order extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
-    //element collection
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name= "orderId")
+    @ElementCollection
+    @CollectionTable(name = "OrderRows", joinColumns = @JoinColumn(name = "idorder"))
     private Collection<OrderRow> orderRowList;
     @Column(nullable = false, unique = true)
     private String orderNumber;
@@ -31,10 +22,10 @@ public class PersistableOrder extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    protected PersistableOrder() {
+    protected Order() {
     }
 
-    public PersistableOrder(String orderNumber, User user) {
+    public Order(String orderNumber, User user) {
         this.user = user;
         this.orderRowList = new ArrayList<>();
         this.orderNumber = orderNumber;
@@ -79,7 +70,7 @@ public class PersistableOrder extends AbstractEntity {
         return totalPrice;
     }
 
-    public PersistableOrder addOrderRow(OrderRow row){
+    public Order addOrderRow(OrderRow row){
         this.orderRowList.add(row);
         this.price += row.getPrice();
         return this;
@@ -89,7 +80,7 @@ public class PersistableOrder extends AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PersistableOrder that = (PersistableOrder) o;
+        Order that = (Order) o;
         return !(getOrderNumber() != null ? !getOrderNumber().equals(that.getOrderNumber()) : that.getOrderNumber() != null);
     }
 
@@ -100,7 +91,7 @@ public class PersistableOrder extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "PersistableOrder{" + "id=" + getId() + ", " +
+        return "Order{" + "id=" + getId() + ", " +
                 "user=" + user +
                 ", orderRowList=" + orderRowList +
                 ", orderNumber='" + orderNumber + '\'' +

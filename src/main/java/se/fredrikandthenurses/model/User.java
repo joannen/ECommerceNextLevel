@@ -5,12 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-@NamedQueries(value ={
-        @NamedQuery(name = "User.GetAll", query = "SELECT u FROM User u"),
-        @NamedQuery(name = "User.FindByUsername", query = "SELECT u FROM User u WHERE u.username = ?1"),
-        @NamedQuery(name= "User.GetAllWithOrders", query = "SELECT u FROM User u JOIN FETCH u.persistableOrderList")})
-
-
 public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
@@ -21,7 +15,7 @@ public class User extends AbstractEntity {
     private boolean active;
     // kan hämtas via orderrepo
     @OneToMany(mappedBy = "user")
-    private Collection<PersistableOrder> persistableOrderList;
+    private Collection<Order> persistableOrderList;
 
     protected User() {}
 
@@ -44,7 +38,7 @@ public class User extends AbstractEntity {
         this.active = active;
     }
 
-    public Collection<PersistableOrder> getPersistableOrderList() {
+    public Collection<Order> getPersistableOrderList() {
         return new HashSet<>(persistableOrderList);
     }
 

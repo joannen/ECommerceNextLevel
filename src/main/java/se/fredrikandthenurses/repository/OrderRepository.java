@@ -1,21 +1,22 @@
 package se.fredrikandthenurses.repository;
 
+import org.springframework.data.repository.CrudRepository;
+import se.fredrikandthenurses.model.Order;
 import se.fredrikandthenurses.model.OrderStatus;
-import se.fredrikandthenurses.model.PersistableOrder;
 import se.fredrikandthenurses.model.User;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by joanne on 21/12/15.
  */
-public interface OrderRepository extends CrudRepository<PersistableOrder> {
+public interface OrderRepository extends CrudRepository<Order, Long> {
 
-    PersistableOrder findByOrderNumber(String number);
+    List<Order> findByUser(User user);
 
-    Collection<PersistableOrder> findByUser(User user);
+    List<Order> findOrdersByStatus (OrderStatus orderStatus);
 
-    Collection<PersistableOrder> findOrdersByStatus(OrderStatus status);
+    Order findByOrderNumber(String orderNumber);
 
-    Collection<PersistableOrder> findByMinimumPrice(Double price);
+    List<Order> findByMinimumPriceGreaterThan(Double price);
 }

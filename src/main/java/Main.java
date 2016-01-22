@@ -1,4 +1,6 @@
-import se.fredrikandthenurses.model.PersistableOrder;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import se.fredrikandthenurses.model.Order;
+import se.fredrikandthenurses.model.Product;
 import se.fredrikandthenurses.model.User;
 import se.fredrikandthenurses.repository.*;
 import se.fredrikandthenurses.service.ECommerceService;
@@ -11,29 +13,18 @@ import javax.persistence.Persistence;
  */
 public class Main {
 
-    public static EntityManagerFactory factory =Persistence.createEntityManagerFactory("lokaldatabas");
-
     public static void main(String[] args) {
 
-        UserRepository userRepository = new JpaUserRepository(factory);
-        OrderRepository orderRepository = new JpaOrderRepository(factory);
-        ProductRepository productRepository = new JpaProductRepository(factory);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()){
 
-        ECommerceService service = new ECommerceService(orderRepository, userRepository, productRepository);
+            context.scan("se.fredrikandthenurses");
+            context.refresh();
 
-        User user = new User("joanne", "abc");
-        PersistableOrder order = new PersistableOrder("10", user);
+            ECommerceService eCommerceService = context.getBean(ECommerceService.class);
 
-        service.saveUser(user);
-        service.saveOrder(order);
+            eCommerceService.saveProduct(new Product("1", "beer", 20.00));
+            System.out.println(eCommerceService.findByProductNumber("1"));
 
-        PersistableOrder order1 = new PersistableOrder("11", user);
-
-        service.saveOrder(order1);
-
-        System.out.println(service.findOrdersByUser(user));
-
-
-
+        }
     }
 }
